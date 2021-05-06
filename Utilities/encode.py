@@ -83,7 +83,7 @@ def do_conversion():
         print_slow(('Desired final file size: ~' + get_size_notation(args.size)), 0.5)
         print_slow(('FFmpeg will use the ' + get_encoder() + ' encoder'), 0.5)
         print_slow(('Expected video bitrate will be: ~' + calculate_bitrate(filename, args.size)), 0.5)
-        print_slow('Audio bitrate will remain as-is (might slightly increase output size)\n\n', 0.5)
+        print_slow('Audio bitrate will remain as-is (might slightly increase output size)\n', 0.5)
         
         
         print_slow('Running 1st pass...', 0.5)
