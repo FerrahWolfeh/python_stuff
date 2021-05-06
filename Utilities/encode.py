@@ -11,14 +11,22 @@ parser.add_argument('-f',default='mkv', help='Output format (mp4, mkv, etc)', me
 parser.add_argument('-p', type=str, default='medium', help='libx264 encoder preset', metavar='preset')
 parser.add_argument('-e', choices=["cpu", "gpu"], default='cpu', help='Use cpu or gpu for encoding (NVIDIA only)')
 
+def remove_ffmpeg_remains():
+    try:
+        os.remove("ffmpeg2pass-0.log")
+        os.remove("ffmpeg2pass-0.log.mbtree")
+    except:
+        pass
+    try:
+        os.remove("ffmpeg2pass-0.log.temp")
+        os.remove("ffmpeg2pass-0.log.mbtree.temp")
+    except:
+        pass
+
 if __name__ == '__main__':
     args = parser.parse_args()
     def signal_handler(signal, frame):
-        try:
-            os.remove("ffmpeg2pass-0.log.temp")
-            os.remove("ffmpeg2pass-0.log.mbtree.temp")
-        except:
-            pass
+        remove_ffmpeg_remains()
         sys.exit(0)
     signal.signal(signal.SIGINT, signal_handler)
 
@@ -86,16 +94,7 @@ def do_conversion():
         ffpb.main(argv=arg_pass)
         
         print('\nCleaning up...')
-        try:
-            os.remove("ffmpeg2pass-0.log")
-            os.remove("ffmpeg2pass-0.log.mbtree")
-        except:
-            pass
-        try:
-            os.remove("ffmpeg2pass-0.log.temp")
-            os.remove("ffmpeg2pass-0.log.mbtree.temp")
-        except:
-            pass
+        remove_ffmpeg_remains()
     time.sleep(0.5)
     print('Done')
 
