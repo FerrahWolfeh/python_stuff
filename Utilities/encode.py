@@ -78,7 +78,7 @@ def do_conversion():
         arg_list = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
         arg_pass = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', filepath(filename) + '-' + get_size_notation(args.size) + '.' + args.f]
         
-        print_slow(('Input file: ' + filename), 0.5)
+        print_slow(('Input file: ' + filepath(filename)), 0.5)
         print_slow(('Output File: ' + filepath(filename) + '-' + get_size_notation(args.size) + '.' + args.f), 0.5)
         print_slow(('Desired final file size: ~' + get_size_notation(args.size)), 0.5)
         print_slow(('FFmpeg will use the ' + get_encoder() + ' encoder'), 0.5)
