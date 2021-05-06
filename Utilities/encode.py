@@ -22,8 +22,6 @@ if __name__ == '__main__':
         sys.exit(0)
     signal.signal(signal.SIGINT, signal_handler)
 
-
-
 def print_slow(text, duration):
     print('\n' + str(text))
     time.sleep(duration)
