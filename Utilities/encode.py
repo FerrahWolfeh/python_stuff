@@ -5,7 +5,7 @@ import ffpb
 
 
 parser = argparse.ArgumentParser(prog='encoder.py', formatter_class=argparse.ArgumentDefaultsHelpFormatter, description='Reduce video size with FFmpeg')
-parser.add_argument('input', type=str, help='Input file')
+parser.add_argument('input', type=str, help='Input file (MUST BE ABSOLUTE PATH)')
 parser.add_argument('size', type=int, help='Desired output size in MB')
 parser.add_argument('-f',default='mkv', help='Output format (mp4, mkv, etc)', metavar='format')
 parser.add_argument('-p', type=str, default='medium', help='libx264 encoder preset', metavar='preset')
