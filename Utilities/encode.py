@@ -17,6 +17,7 @@ class style():
     yellow = '\033[1m\033[93m'
     blue = '\033[1m\033[34m'
     white = '\033[1m\033[37m'
+    red = '\033[1m\033[31m'
     reset = '\033[0m'
 
 def remove_ffmpeg_remains():
@@ -86,11 +87,14 @@ def outfile(filename):
 
 def do_conversion():
     if os.path.isdir(args.input):
+        if args.o != None:
+            print(style.red + 'Syntax Error: "-o" argument must not be used when converting entire directories' + style.reset)
+            sys.exit(1)
         file = [entry.path for entry in os.scandir(args.input) if entry.is_file()]
     elif os.path.isfile(args.input):
         file = [args.input]
         if args.o != None:
-            print(style.yellow + 'WARNING: ' + style.white + 'using "-o" flag will override the "-f" flag' + style.reset)
+            print(style.yellow + 'WARNING: ' + style.white + 'using "-o" will override the "-f" argument' + style.reset)
     
     for filename in file:
         
