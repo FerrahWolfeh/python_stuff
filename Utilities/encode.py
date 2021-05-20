@@ -82,8 +82,8 @@ def do_conversion():
     
     for filename in mov:
         
-        arg_list = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
-        arg_pass = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
+        arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
+        arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
         
         print_slow((style.white + 'Input file: ' + style.reset + os.path.abspath(filename)), 0.5)
         print_slow((style.white + 'Output File: ' + style.reset + outfile(filename)), 0.5)
