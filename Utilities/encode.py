@@ -21,6 +21,7 @@ class style():
     red = '\033[1m\033[31m'
     reset = '\033[0m'
 
+
 def remove_ffmpeg_remains():
     try:
         os.remove("ffmpeg2pass-0.log")
