@@ -83,7 +83,7 @@ def outfile(filename):
     if args.o == None:
         return filepath(filename) + '-' + get_size_notation(args.size) + '.' + args.f
     else:
-        return args.o
+        return os.path.abspath(args.o)
 
 
 def do_conversion():
