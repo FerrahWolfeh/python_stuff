@@ -5,9 +5,9 @@ import ffpb
 
 
 parser = argparse.ArgumentParser(prog='encoder.py', formatter_class=argparse.ArgumentDefaultsHelpFormatter, description='Reduce video size with FFmpeg')
-parser.add_argument('input', type=str, help='Input file (MUST BE ABSOLUTE PATH)')
+parser.add_argument('input', type=str, help='Input file')
 parser.add_argument('size', type=int, help='Desired output size in MB')
-parser.add_argument('-f',default='mkv', help='Output format (mp4, mkv, etc)', metavar='format')
+parser.add_argument('-f', default='mkv', help='Output format (mp4, mkv, etc)', metavar='format')
 parser.add_argument('-p', type=str, default='medium', help='libx264 encoder preset', metavar='preset')
 parser.add_argument('-e', choices=["cpu", "gpu"], default='cpu', help='Use cpu or gpu for encoding (NVIDIA only)')
 
@@ -51,17 +51,17 @@ def calculate_bitrate(filename, size):
     duration = float(proc.stdout.decode('utf-8'))
          
     exp_br = int(float(size) * 1024 * 1024 * 8 / duration / 1000)
-    final_br = int(exp_br - (int(exp_br * 0.020)))
-    text_br = str(str(final_br) + 'k')
+    final_br = exp_br - (exp_br * 0.020)
+    text_br = str(final_br) + 'k'
         
     return text_br
 
 def get_size_notation(size):
     fltsize = int(size)
     if fltsize >= 1024:
-        realsize = str(str(float(fltsize / 1024)) + 'GB')
+        realsize = str(float(fltsize / 1024)) + 'GB'
     else:
-        realsize = str(str(size) + 'MB')
+        realsize = str(size) + 'MB'
     return str(realsize)
 
 def filepath(file):
