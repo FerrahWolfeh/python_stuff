@@ -10,6 +10,14 @@ parser.add_argument('size', type=int, help='Desired output size in MB')
 parser.add_argument('-f', default='mkv', help='Output format (mp4, mkv, etc)', metavar='format')
 parser.add_argument('-p', type=str, default='medium', help='libx264 encoder preset', metavar='preset')
 parser.add_argument('-e', choices=["cpu", "gpu"], default='cpu', help='Use cpu or gpu for encoding (NVIDIA only)')
+parser.add_argument('-o', type=str, help='Output file', metavar='output')
+
+class style():
+    green = '\033[1m\033[32m'
+    yellow = '\033[1m\033[93m'
+    blue = '\033[1m\033[34m'
+    white = '\033[1m\033[37m'
+    reset = '\033[0m'
 
 def remove_ffmpeg_remains():
     try:
@@ -24,11 +32,13 @@ def remove_ffmpeg_remains():
         pass
 
 if __name__ == '__main__':
+    os.system("") #Because Windows is stupid and doesn't like ANSI colors
     args = parser.parse_args()
     def signal_handler(signal, frame):
         remove_ffmpeg_remains()
         sys.exit(0)
     signal.signal(signal.SIGINT, signal_handler)
+
 
 def print_slow(text, duration):
     print('\n' + str(text))
@@ -67,23 +77,32 @@ def get_size_notation(size):
 def filepath(file):
     return os.path.abspath(file)
 
+def outfile(filename):
+    if args.o == None:
+        return filepath(filename) + '-' + get_size_notation(args.size) + '.' + args.f
+    else:
+        return args.o
+
+
 def do_conversion():
     if os.path.isdir(args.input):
         file = [entry.path for entry in os.scandir(args.input) if entry.is_file()]
     elif os.path.isfile(args.input):
         file = [args.input]
+        if args.o != None:
+            print(style.yellow + 'WARNING: ' + style.white + 'using "-o" flag will override the "-f" flag' + style.reset)
     
     for filename in file:
         
         arg_list = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
-        arg_pass = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', filepath(filename) + '-' + get_size_notation(args.size) + '.' + args.f]
+        arg_pass = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
         
-        print_slow(('Input file: ' + filepath(filename)), 0.5)
-        print_slow(('Output File: ' + filepath(filename) + '-' + get_size_notation(args.size) + '.' + args.f), 0.5)
-        print_slow(('Desired final file size: ~' + get_size_notation(args.size)), 0.5)
-        print_slow(('FFmpeg will use the ' + get_encoder() + ' encoder'), 0.5)
-        print_slow(('Expected video bitrate will be: ~' + calculate_bitrate(filename, args.size)), 0.5)
-        print_slow('Audio bitrate will remain as-is (might slightly increase output size)\n', 0.5)
+        print_slow((style.white + 'Input file: ' + style.reset + filepath(filename)), 0.5)
+        print_slow((style.white + 'Output File: ' + style.reset + outfile(filename)), 0.5)
+        print_slow((style.white + 'Desired final file size: ' + style.reset + '~' + get_size_notation(args.size)), 0.5)
+        print_slow((style.white + 'FFmpeg will use the ' + style.blue + get_encoder() + style.white + ' encoder' + style.reset), 0.5)
+        print_slow((style.white + 'Expected video bitrate will be: ' + style.reset + '~' + calculate_bitrate(filename, args.size)), 0.5)
+        print_slow(style.blue + 'Audio bitrate will remain as-is\n' + style.reset, 0.5)
         
         
         print_slow('Running 1st pass...', 0.5)
@@ -95,7 +114,8 @@ def do_conversion():
         print('\nCleaning up...')
         remove_ffmpeg_remains()
     time.sleep(0.5)
-    print('Done')
+    print(style.green + 'Done' + style.reset)
+    exit(0)
 
 do_conversion()
 
