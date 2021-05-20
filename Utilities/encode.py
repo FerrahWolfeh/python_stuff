@@ -77,15 +77,11 @@ def get_size_notation(size):
         realsize = str(size) + 'MB'
     return str(realsize)
 
-def filepath(file):
-    return os.path.abspath(file)
-
 def outfile(filename):
     if args.o == None:
-        return filepath(filename) + '-' + get_size_notation(args.size) + '.' + args.f
+        return os.path.abspath(filename) + '-' + get_size_notation(args.size) + '.' + args.f
     else:
         return os.path.abspath(args.o)
-
 
 def do_conversion():
     if os.path.isdir(args.input):
@@ -103,7 +99,7 @@ def do_conversion():
         arg_list = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
         arg_pass = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
         
-        print_slow((style.white + 'Input file: ' + style.reset + filepath(filename)), 0.5)
+        print_slow((style.white + 'Input file: ' + style.reset + os.path.abspath(filename)), 0.5)
         print_slow((style.white + 'Output File: ' + style.reset + outfile(filename)), 0.5)
         print_slow((style.white + 'Desired final file size: ' + style.reset + '~' + get_size_notation(args.size)), 0.5)
         print_slow((style.white + 'FFmpeg will use the ' + style.blue + get_encoder() + style.white + ' encoder ' + style.white + 'with the ' + style.magenta + args.p + style.white + ' preset' + style.reset), 0.5)
