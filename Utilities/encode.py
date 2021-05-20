@@ -101,7 +101,7 @@ def do_conversion():
         print_slow('\nRunning ' + style.green + '2nd' + style.reset + ' pass...', 0.5)
         ffpb.main(argv=arg_pass)
         
-        print('\nCleaning up...')
+        print_slow(style.white + 'Cleaning up...' + style.reset, 0.5)
     time.sleep(0.5)
     print(style.green + 'Done' + style.reset)
     sys.exit(0)
