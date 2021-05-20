@@ -56,7 +56,7 @@ def calculate_bitrate(filename, size):
     try:
         proc = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", filename],check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        print(e.output.decode('utf-8'))
+        print(style.red + '\nffprobe error:\n' + style.reset + e.output.decode('utf-8'))
         sys.exit(1)
 
         
