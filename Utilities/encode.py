@@ -95,7 +95,7 @@ def do_conversion():
     elif os.path.isfile(args.input):
         file = [args.input]
         if args.o != None:
-            print(style.yellow + 'WARNING: ' + style.white + 'using "-o" will override the "-f" argument' + style.reset)
+            print(style.yellow + 'WARNING: ' + style.white + 'Using "-o" will override the "-f" argument' + style.reset)
     
     for filename in file:
         
@@ -120,7 +120,7 @@ def do_conversion():
         remove_ffmpeg_remains()
     time.sleep(0.5)
     print(style.green + 'Done' + style.reset)
-    exit(0)
+    sys.exit(0)
 
 do_conversion()
 
