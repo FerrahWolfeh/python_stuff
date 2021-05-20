@@ -12,9 +12,15 @@ import tempfile
 import re
 import locale
 from tqdm import tqdm
-import queue
 
-
+class style():
+    green = '\033[1m\033[32m'
+    magenta = '\033[1m\033[35m'
+    yellow = '\033[1m\033[93m'
+    blue = '\033[1m\033[34m'
+    white = '\033[1m\033[37m'
+    red = '\033[1m\033[31m'
+    reset = '\033[0m'
 
 # This part is a modified version of ffpb made by:
 # Copyright (c) 2017-2021 Martin Larralde <martin.larralde@ens-paris-saclay.fr>
@@ -117,6 +123,7 @@ class ProgressNotifier(object):
                     total=total,
                     dynamic_ncols=True,
                     unit=unit,
+                    colour='green',
                     ncols=0,
                     ascii=os.name=="nt",  # windows cmd has problems with unicode
                 )
@@ -141,7 +148,7 @@ def ffprogress(argv=None, stream=sys.stderr, encoding=None, tqdm=tqdm):
 
     except KeyboardInterrupt:
         print("Exiting.", file=stream)
-        return signal.SIGINT + 128  # POSIX standard
+        sys.exit(0)
 
     except Exception as err:
         print("Unexpected exception:", err, file=stream)
@@ -159,7 +166,6 @@ def ffprogress(argv=None, stream=sys.stderr, encoding=None, tqdm=tqdm):
 
 
 
-
 parser = argparse.ArgumentParser(prog='encoder.py', formatter_class=argparse.ArgumentDefaultsHelpFormatter, description='Reduce video size with FFmpeg')
 parser.add_argument('input', type=str, help='Input file')
 parser.add_argument('size', type=int, help='Desired output size in MB')
@@ -168,14 +174,6 @@ parser.add_argument('-p', type=str, default='medium', help='libx264 encoder pres
 parser.add_argument('-e', choices=["cpu", "gpu"], default='cpu', help='Use cpu or gpu for encoding (NVIDIA only)')
 parser.add_argument('-o', type=str, help='Output file', metavar='output')
 
-class style():
-    green = '\033[1m\033[32m'
-    magenta = '\033[1m\033[35m'
-    yellow = '\033[1m\033[93m'
-    blue = '\033[1m\033[34m'
-    white = '\033[1m\033[37m'
-    red = '\033[1m\033[31m'
-    reset = '\033[0m'
 
 if __name__ == '__main__':
     os.system("") #Because Windows is stupid and doesn't like ANSI colors
@@ -238,8 +236,8 @@ def do_conversion():
     
     for filename in mov:
         
-        arg_list = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
-        arg_pass = ['-hide_banner', '-y', '-i', filename, '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
+        arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
+        arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
         
         print_slow((style.white + 'Input file: ' + style.reset + os.path.abspath(filename)), 0.5)
         print_slow((style.white + 'Output File: ' + style.reset + outfile(filename)), 0.5)
