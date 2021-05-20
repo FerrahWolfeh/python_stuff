@@ -110,10 +110,10 @@ def do_conversion():
         print_slow(style.blue + 'Audio bitrate will remain as-is\n' + style.reset, 0.5)
         
         
-        print_slow('Running 1st pass...', 0.5)
+        print_slow('Running ' + style.green + '1st' + style.reset + ' pass...', 0.5)
         ffpb.main(argv=arg_list)
 
-        print('\nRunning 2nd pass...')
+        print_slow('\nRunning ' + style.green + '2nd' + style.reset + ' pass...', 0.5)
         ffpb.main(argv=arg_pass)
         
         print('\nCleaning up...')
