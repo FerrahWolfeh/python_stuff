@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
-import os, sys, argparse, time, subprocess, signal, tempfile
+import os 
+import sys
+import argparse
+import time
+import subprocess
+import signal
+import tempfile
 import ffpb
 
-
-parser = argparse.ArgumentParser(prog='encoder.py', formatter_class=argparse.ArgumentDefaultsHelpFormatter, description='Reduce video size with FFmpeg')
-parser.add_argument('input', type=str, help='Input file')
-parser.add_argument('size', type=int, help='Desired output size in MB')
-parser.add_argument('-f', default='mkv', help='Output format (mp4, mkv, etc)', metavar='format')
-parser.add_argument('-p', type=str, default='medium', help='libx264 encoder preset', metavar='preset')
-parser.add_argument('-e', choices=["cpu", "gpu"], default='cpu', help='Use cpu or gpu for encoding (NVIDIA only)')
-parser.add_argument('-o', type=str, help='Output file', metavar='output')
 
 class style():
     green = '\033[1m\033[32m'
@@ -20,6 +18,15 @@ class style():
     white = '\033[1m\033[37m'
     red = '\033[1m\033[31m'
     reset = '\033[0m'
+
+parser = argparse.ArgumentParser(prog='encoder.py', formatter_class=argparse.ArgumentDefaultsHelpFormatter, description='Reduce video size with FFmpeg')
+parser.add_argument('input', type=str, help='Input file')
+parser.add_argument('size', type=int, help='Desired output size in MB')
+parser.add_argument('-f', default='mkv', help='Output format (mp4, mkv, etc)', metavar='format')
+parser.add_argument('-p', type=str, default='medium', help='libx264 encoder preset', metavar='preset')
+parser.add_argument('-e', choices=["cpu", "gpu"], default='cpu', help='Use cpu or gpu for encoding (NVIDIA only)')
+parser.add_argument('-o', type=str, help='Output file', metavar='output')
+
 
 if __name__ == '__main__':
     os.system("") #Because Windows is stupid and doesn't like ANSI colors
