@@ -14,6 +14,7 @@ parser.add_argument('-o', type=str, help='Output file', metavar='output')
 
 class style():
     green = '\033[1m\033[32m'
+    magenta = '\033[1m\033[35m'
     yellow = '\033[1m\033[93m'
     blue = '\033[1m\033[34m'
     white = '\033[1m\033[37m'
@@ -104,7 +105,7 @@ def do_conversion():
         print_slow((style.white + 'Input file: ' + style.reset + filepath(filename)), 0.5)
         print_slow((style.white + 'Output File: ' + style.reset + outfile(filename)), 0.5)
         print_slow((style.white + 'Desired final file size: ' + style.reset + '~' + get_size_notation(args.size)), 0.5)
-        print_slow((style.white + 'FFmpeg will use the ' + style.blue + get_encoder() + style.white + ' encoder' + style.reset), 0.5)
+        print_slow((style.white + 'FFmpeg will use the ' + style.blue + get_encoder() + style.white + ' encoder ' + style.white + 'with the ' + style.magenta + args.p + style.white + ' preset' + style.reset), 0.5)
         print_slow((style.white + 'Expected video bitrate will be: ' + style.reset + '~' + calculate_bitrate(filename, args.size)), 0.5)
         print_slow(style.blue + 'Audio bitrate will remain as-is\n' + style.reset, 0.5)
         
