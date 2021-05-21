@@ -44,13 +44,6 @@ def print_slow(text, duration):
     time.sleep(duration)
 
 
-def get_encoder():
-    if args.e == 'cpu':
-        return 'libx264'
-    elif args.e == 'gpu':
-        return 'h264_nvenc'
-
-
 def calculate_bitrate(filename, size):
     try:
         proc = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", filename], check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -97,22 +90,22 @@ def do_conversion():
     for filename in mov:
 
         if args.e == 'h264':
-            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
-            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
+            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libx264', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'null', os.devnull]
+            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libx264', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
         elif args.e == 'hevc':
-            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
-            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
+            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libx265', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'null', os.devnull]
+            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libx265', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
         elif args.e == 'vp9':
-            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
-            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
+            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libvpx-vp9', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-row-mt', '1', '-an', '-pass', '1', '-f', 'null', os.devnull]
+            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libvpx-vp9', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-row-mt', '1', '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
         elif args.e == 'av1':
-            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-an', '-pass', '1', '-f', 'matroska', os.devnull]
-            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', get_encoder(), '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
+            arg_list = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libaom-av1', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-row-mt', '1', '-an', '-pass', '1', '-f', 'null', os.devnull]
+            arg_pass = ['-hide_banner', '-y', '-i', os.path.abspath(filename), '-c:v', 'libaom-av1', '-preset', args.p, '-b:v', calculate_bitrate(filename, args.size), '-row-mt', '1', '-map', '0', '-c:a', 'copy', '-pass', '2', outfile(filename)]
 
         print_slow((style.white + 'Input file: ' + style.reset + os.path.abspath(filename)), 0.5)
         print_slow((style.white + 'Output File: ' + style.reset + outfile(filename)), 0.5)
         print_slow((style.white + 'Desired final file size: ' + style.reset + '~' + get_size_notation(args.size)), 0.5)
-        print_slow((style.white + 'FFmpeg will use the ' + style.blue + get_encoder() + style.white + ' encoder ' + style.white + 'with the ' + style.magenta + args.p + style.white + ' preset' + style.reset), 0.5)
+        print_slow((style.white + 'FFmpeg will use the ' + style.blue + args.e + style.white + ' encoder ' + style.white + 'with the ' + style.magenta + args.p + style.white + ' preset' + style.reset), 0.5)
         print_slow((style.white + 'Expected video bitrate will be: ' + style.reset + '~' + calculate_bitrate(filename, args.size)), 0.5)
         print_slow(style.blue + 'Audio bitrate will remain as-is\n' + style.reset, 0.5)
 
