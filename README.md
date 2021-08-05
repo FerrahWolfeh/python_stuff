@@ -24,11 +24,4 @@ Encoder takes an `input` video file and the desired output `size` as arguments.
 
 ## BME280 Data logger
 
-Located [here](https://github.com/DatCrazyDelphox/python_stuff/blob/main/Sensors/sensor.py), this just takes info from a BME280 sensor connected to a Raspberry Pi first I2C bus and logs the data recieved into a csv file.
-
-### Dependencies
-- `smbus`
-- `RPi.bme280`
-- `bme280`
-
-All of which can be installed with `pip`
+This project is now made in Rust and can be found [here](https://github.com/DatCrazyDelphox/rpi-bme280-logger)
